@@ -78,14 +78,32 @@ This is the place for you to write reflections:
 
 #### Reflection Publisher-1
 1. In the Observer pattern diagram explained by the Head First Design Pattern book, Subscriber is defined as an interface. Explain based on your understanding of Observer design patterns, do we still need an interface (or `trait` in Rust) in this BambangShop case, or a single Model `struct` is enough?
+
 Since we implement the Observer Design Pattern, it's better to define `Subscriber` as an interface (or `trait`). We are developing an online shop, thus it is possible that we want to add another `Subscriber` (maybe Email, SMS, etc.) that would receive the notification. Furthermore, by making `Subscriber` an interface, we keep the Open-Closed Principle in SOLID so the maintenance will be easier. Additionally, using a trait also increases flexibility because each `Subscriber` can have its own implementation without changing the existing code. This makes the system more scalable as new notification methods can be added without modifying the core logic.
 
+
 2. `id` in `Program` and `url` in `Subscriber` is intended to be unique. Explain based on your understanding, is using `Vec` (list) sufficient or using `DashMap` (map/dictionary) like we currently use is necessary for this case? 
+
 In my opinion, using `DashMap` maximizes the object structure. Since `Program` and `Subscriber` have unique attributes, we can make use of them as keys. Using `DashMap` also minimizes the searching complexity from O(N) (if we use `Vec`) to O(1). This way, our program can handle many `Subscribers` and `Program` without getting heavy as the number of objects increases. Moreover, using a map structure also helps prevent duplicate entries because each key must be unique. This ensures data consistency, which is important since both id and url are intended to be unique identifiers.
 
+
 3. When programming using Rust, we are enforced by rigorous compiler constraints to make a thread-safe program. In the case of the List of Subscribers (`SUBSCRIBERS`) static variable, we used the `DashMap` external library for thread safe `HashMap`. Explain based on your understanding of design patterns, do we still need `DashMap` or we can implement Singleton pattern instead? 
+
 We still need `DashMap`. In this case, `DashMap` is used for data access in a multi-threaded environment. We need it to avoid race conditions. Meanwhile, Singleton is just ensuring there is only one instance of a database and accessing it globally. Additionally, Singleton does not inherently provide thread safety. Even if we use Singleton, we still need a thread-safe data structure like `DashMap` to safely handle concurrent access. Therefore, both concepts serve different purposes and cannot replace each other.
 
 #### Reflection Publisher-2
+1. In the Model-View Controller (MVC) compound pattern, there is no “Service” and “Repository”. Model in MVC covers both data storage and business logic. Explain based on your understanding of design principles, why we need to separate “Service” and “Repository” from a Model? 
+
+This separation is necessary to keep the Single Responsibility Principle in SOLID. Repository will store and interact with data, while Service is going to handle the business logic. Commonly, the flow is that a Service will call a function in the Repository, and let the Repository do something with the data. If we combine those two in one file, it will become too complex and hard to maintain because one component handles too many responsibilities. Additionally, separating them also improves testability. We can test the Service logic without depending on the data layer, and vice versa. This makes debugging easier and the code more modular.
+
+
+2. What happens if we only use the Model? Explain your imagination on how the interactions between each model (Program, Subscriber, Notification) affect the code complexity for each model? 
+
+If we only use the Model, the code will be tightly coupled. There will be so many functions with many responsibilities. Each function will depend on other functions, which makes it hard to modify one function without affecting another function. The code will be very long and difficult to test.Moreover, interactions between models like Program, Subscriber, and Notification will become messy because each model might directly call each other’s logic. This can create circular dependencies and make the overall system harder to understand and maintain as it grows.
+
+
+3. Have you explored more about Postman? Tell us how this tool helps you to test your current work. You might want to also list which features in Postman you are interested in or feel like it is helpful to help your Group Project or any of your future software engineering projects. 
+
+Postman is very easy to understand and use. Since I started using it in PBP, it has been a functional tool that helps verify our code's functionality. The simulation it provides is also very straightforward. Additionally, Postman helps me test API endpoints without needing to build the frontend first. Some features that I find helpful are Collections for organizing requests, Environment variables for managing different configurations, and the ability to save and reuse requests. I am also interested in its automated testing feature because it can help ensure that our API works correctly as the project grows.
 
 #### Reflection Publisher-3
