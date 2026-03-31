@@ -107,3 +107,16 @@ If we only use the Model, the code will be tightly coupled. There will be so man
 Postman is very easy to understand and use. Since I started using it in PBP, it has been a functional tool that helps verify our code's functionality. The simulation it provides is also very straightforward. Additionally, Postman helps me test API endpoints without needing to build the frontend first. Some features that I find helpful are Collections for organizing requests, Environment variables for managing different configurations, and the ability to save and reuse requests. I am also interested in its automated testing feature because it can help ensure that our API works correctly as the project grows.
 
 #### Reflection Publisher-3
+
+1. Observer Pattern has two variations: Push model (publisher pushes data to subscribers) and Pull model (subscribers pull data from publisher). In this tutorial case, which variation of Observer Pattern that we use? 
+
+This tutorial uses the Push model. The Publisher (BambangShop) actively triggers sending data to Subscribers through the `update()` method immediately after an event (such as creating a new product) occurs.
+
+
+2. What are the advantages and disadvantages of using the other variation of Observer Pattern for this tutorial case? (example: if you answer Q1 with Push, then imagine if we used Pull) 
+
+The advantage of using Pull is that Subscribers have full control over when they want to retrieve data, so they will not be overwhelmed by receiving too many notifications at once. The disadvantage is that notifications are not real-time. Subscribers have to continuously check (poll) the server, which can waste network resources if there are no data updates.
+
+
+3. Explain what will happen to the program if we decide to not use multi-threading in the notification process. 
+If we do not use multi-threading, the program will run synchronously (sequentially). If one subscriber has a slow internet connection or its server is down, the Main App will stop and wait (hang) until the request is completed before continuing to send notifications to the next subscriber. Using multi-threading ensures that the notification process does not block the main application performance.
